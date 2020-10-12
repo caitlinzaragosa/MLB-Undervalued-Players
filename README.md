@@ -14,10 +14,15 @@ This data was acquired from “Sean Lahman’s Baseball Database” and contains
 ## Approach and Analytics:
 1.) Exploring and cleaning up data: The first and most essential part of this project was tidying up data to ensure the information being used was relevant and in the correct format. In order to begin an analysis, I wanted to first combine salaries with an inner join to the pitchers database so that every player has the correlating salary. Because salaries tend to differ due to inflation, I wanted to look at data from the past 5 years so that players are still relevant for 2018 predictions and inflation isn’t affecting the predicted outcomes. I decided to take out all the categorical data (Team and League) and data that didn’t appear relevant (stint, intentional walks, sacrifices by opposing batters, sacrifice flies by opposing batters, and grounded double plays by opposing batter) after doing the inner merge. To address the issue of players being duplicated in the database (likely because they had played several years), I decided to aggregate the players together and use their mean scores to get an average of their performance. I scaled the salary to ensure normalization in our dataset and decided to look at the quartiles of the salaries to begin defining the tiers. 
 Based on the quartiles of the salary, this was the breakdown of the tiers:
+
 •	Tier 1= x<= -0.560813 (Q1)
+
 •	Tier 2 = -0.560813 <= x <= 0 (Q2)
+
 •	Tier 3 = 0<= x <=  0.123066 (Q3)
+
 •	Tier 4 = x>0.123066 (Q4)
+
 
 I assigned tiers according to the player’s salary and began setting up for model creation. 
 
@@ -49,17 +54,18 @@ Because cluster 1 had the most top tier players, I then re-labeled the tiers so 
 Due to the clustering technique done to modify the model, the accuracy increased by about 15%. The next step was comparing the more accurate predicted outcomes and the actual tiers of the players. Through clustering, we have found common characteristics between players that will add substance to the prediction because that should put similar performing players in the same cluster and tier. Now that the new neural network model has been trained with these more similar players being in the same category, the predictions should mean a lot more. This would give us insight to the players that are performing like top tier players and should be valued as such, but currently aren’t.
 
 5.) Reviewing results: To being the comparison out the newly predicted tiers (cluster adjusted) and the current and actual tiers, I added a column to see if the player is overvalued, undervalued, or correctly valued with the following conditions: 
+
 •	 If the prediction is greater than the original tier, then player is overvalued
 
-  o	Predicted > current tier = overvalued
+    o	Predicted > current tier = overvalued
   
 •	If the prediction is less than the original tier, then player is undervalued
 
-  o	Predicted < current tier = undervalued
+    o	Predicted < current tier = undervalued
   
 •	If the prediction is equal to the original tier, then the player is correctly valued
 
-  o	Predicted = current tier = correctly valued
+    o	Predicted = current tier = correctly valued
   
 By summing up the number of those undervalued, I got a number of 125. This means that out of the dataset, there are 125 potentially undervalued players that are performing like higher tier players. Diving deeper into these 125 undervalued players, what would make the most difference are those who are currently valued at a 3 or 4 tiered player but are predicted to be a tier 1 player. This number came out to be 48, which means that these are the pitchers that are potentially going to be most undervalued players. In addition, Earned Run Average is a metric that can be used to see which players have an average ERA that is less than the mean ERA in their category. Out of the super undervalued players, it looks like there are 22 players with an average ERA that is less than the mean of the entire super undervalued players, which can be an important aspect to consider.
 
